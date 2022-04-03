@@ -1,0 +1,8 @@
+#!/bin/sh
+
+
+a="$(date '+%a %F %T')"
+a="$a$(echo ' ')"
+a="$a$(TZ='Asia/Singapore' date '+%H:%M')"
+
+echo $a

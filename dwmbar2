@@ -1,0 +1,95 @@
+	# Get current mpd track filename or artist - title if possible.
+	# mpc -f "[[%artist% - ]%title%]|[%file%]" 2>/dev/null | grep -v "volume:" | head -n 1 && echo "$delim"
+
+	# If the weather report is current, show daily precipitation chance,
+	# low and high.  Don't even bother to understand this one unless you
+	# have all day. Takes the weather report format from wttr.in and makes
+	# it look like how I want it for the status bar.
+	# [ "$(stat -c %y "$HOME/.local/share/weatherreport" 2>/dev/null | cut -d' ' -f1)" = "$(date '+%Y-%m-%d')" ] &&
+	#    sed '16q;d' "$HOME/.local/share/weatherreport" | grep -wo "[0-9]*%" | sort -n | sed -e '$!d' | sed -e "s/^/rain /g" | tr -d '\n' &&
+	#    echo ", "
+#		sed '13q;d' "$HOME/.local/share/weatherreport" | grep -o "m\\(-\\)*[0-9]\\+" | sort -n -t 'm' -k 2n | sed -e 1b -e '$!d' | tr '\n|m' ' ' | awk '{print $1 "° -",$2 "°"}' &&
+	#	echo "$delim"
+	[ "$(stat -c %y "$HOME/.local/share/weatherreport" 2>/dev/null | cut -d' ' -f1)" = "$(date '+%Y-%m-%d')" ] &&
+	    sed '16q;d' "$HOME/.local/share/weatherreport" | grep -wo "[0-9]*%" | sort -n | sed -e '$!d' | sed -e "s/^/rain /g" | tr -d '\n' &&
+	    echo ", "
+	sed '13q;d' "$HOME/.local/share/weatherreport" | grep -o "m\\(-\\)*[0-9]\\+" | sort -n -t 'm' -k 2n | sed -e 1b -e '$!d' | tr '\n|m' ' ' | awk '{print $1 "°-"$2"°"}' &&
+	    echo "$delim"
+
+	a=$(cat /proc/meminfo)
+	echo "mem "
+	hbar $(echo "100 - `echo $a | awk '{print $8}'` / `echo $a | awk '{print $2}'` * 100" | bc -l | sed 's/\..*//')
+	echo "$delim"
+
+	# Get the volume of ALSA's master volume output.  Show an icon if or
+	# not muted.
+	echo "vol "
+	amixer_vol=$(amixer get Master | grep -o "[0-9]*%\|\[on\]\|\[off\]")
+       	echo $amixer_vol | awk '{print $2}' | sed "s/\[on\]/^c#00aa10^/;s/\[off\]/^c#aa0010^/"
+	hbar `echo $amixer_vol | awk '{print $1}' | sed "s/%//"`
+	echo "$delim"
+
+	if [ -f /sys/class/backlight/intel_backlight/brightness ]; then
+	echo "bri "
+	bri=$(cat /sys/class/backlight/intel_backlight/brightness)
+        if [ "$bri" -le 10 ]; then
+		echo "$bri"
+	else
+		hbar $(($bri / 12))
+	fi
+	fi
+	echo "$delim"
+
+	fan=$(sensors | grep fan1 | field 2)
+	if [ -f "/tmp/fanspin" ]; then
+		echo "^c#aaaa10^$fan^c#ddaaaa^"
+	else
+		echo "^c#00aa10^$fan^c#ddaaaa^"
+	fi
+	echo "$delim"
+
+	# Wifi quality percentage and  icon if ethernet is connected.
+	if [[ $(grep "^\s*w" /proc/net/wireless) ]]; then
+	    echo "net "
+	    hbar `grep "^\s*w" /proc/net/wireless | awk '{ print int($3 * 100 / 70) }'`
+	    sed "s/down//;s/up//" /sys/class/net/e*/operstate
+	    echo "$delim"
+	fi
+
+
+
+	# Date and time.
+
+	}
+
+hbar() { \
+	height=$(( 22 - $(~/.scripts/percentage_of $1 22)))
+	echo "^r0,4,10,22^^c#222220^^r0,4,10,$height^^f10^"
+	echo "^c#ddaaaa^"
+}
+
+update() { \
+	# So all that big status function was just a command that quicking gets
+	# what we want to be the statusbar. This xsetroot command is what sets
+	# it. Note that the tr command replaces newlines with spaces. This is
+	# to prevent some weird issues that cause significant slowing of
+	# everything in dwm. Note entirely sure of the cause, but again, the tr
+	# command easily avoids it.
+	xsetroot -name "$(status | tr -d '\n' )" &
+    wait
+
+	# Check to see if new weather report is needed.
+	#testweather &
+    wait
+    }
+
+
+while :; do
+    update
+	# Sleep for a minute after changing the status bar before updating it
+	# again. We run sleep in the background and use wait until it finishes,
+    # because traps can interrupt wait immediately, but they can't do that
+    # with sleep.
+	sleep 1 &
+    wait
+done

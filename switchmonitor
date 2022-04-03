@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+DIRECTION=${$1:-"next"}
+
+if [[ $1 -eq "next" ]]; then
+    
+else
+    xdotool mousemove_relative -- -1920 0
+fi
+    

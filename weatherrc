@@ -1,0 +1,4 @@
+#!/bin/bash
+
+st -e curl -4 wttr.in
+cat

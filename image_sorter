@@ -1,0 +1,16 @@
+#!/bin/bash
+
+pics=$(/bin/ls -p | grep -v / | sort -R)
+d_dir=~/nextcloud/\(\(\(memes\)\)\)/sorted/
+dest_dirs=$(/bin/ls -p $d_dir)
+
+for pic in $pics; do
+   sxiv $pic & pid=$!
+   a=$(echo "$dest_dirs sleep/ exit/" | rev | cut -c2- | rev | sed 's;/ ;\n;g' | dmenu_color.sh)
+   kill $pid
+   [[ $a == "exit" ]] && exit
+   [[ $a == "sleep" ]] && sleep 5 && continue
+   [[ $a == "" ]] && continue
+   echo $d_dir$a
+   mv $pic $d_dir$a
+done

@@ -1,0 +1,42 @@
+#!/bin/bash
+NUM0=$(cat /sys/class/power_supply/BAT0/capacity)
+STATE0=$(cat /sys/class/power_supply/BAT0/status)
+NUM1=$(cat /sys/class/power_supply/BAT1/capacity)
+STATE1=$(cat /sys/class/power_supply/BAT1/status)
+
+#colorget() {
+#if [[ $NUM0 -ge 80 ]]; then
+#	color="#00FF00"
+#elif [[ $NUM0 -ge 60 ]]; then
+#	color="#FFFFFF"
+#elif [[ $NUM0 -ge 40 ]]; then
+#	color="#FFF600"
+#elif [[ $NUM0 -ge 20 ]]; then
+#	color="#FFAE00"
+#else
+#	color="#FF0000"
+#fi ;}
+
+#if [[ $STATE1 == "Charging" ]]; then
+#    color="#ffffff"
+#elif [[ $STATE1 == "Unknown" ]]; then
+#    color="#00FF00"
+#else
+#    colorget
+#fi
+
+
+if [ -f /sys/class/power_supply/BAT0/capacity ]; then
+    [ -f /sys/class/power_supply/BAT1/capacity ] && [[ $NUM0 -le 100 ]] && [[ $NUM1 -le 100 ]] && echo "$(echo "$STATE0" | sed -e "s/,//g;s/Discharging/🔋/;s/Charging/🔌/;s/Unknown/⚡/;s/Full/⚡/;s/ 0*/ /g") $(echo "$NUM0" | sed -e 's/$/%/;s/100%//')|$(echo $STATE1 | sed -e "s/,//g;s/Discharging/🔋/;s/Charging/🔌/;s/Unknown/⚡/;s/Full/⚡/;s/ 0*/ /g;s/ :/ /g") $(echo $NUM1 | sed -e 's/$/%/;s/98%//')"
+else
+    [ -f /sys/class/power_supply/BAT1/capacity ] && echo "$(echo $STATE1 | sed -e "s/,//g;s/Discharging/🔋/;s/Charging/🔌/;s/Unknown/⚡/;s/Full/⚡/;s/ 0*/ /g;s/ :/ /g") $(echo $NUM1 | sed -e 's/$/%/')"
+fi
+
+exit
+
+if [ -f /sys/class/power_supply/BAT0/capacity ]; then
+    [ -f /sys/class/power_supply/BAT1/capacity ] && [[ $NUM0 -le 95 ]] && [[ $NUM1 -le 95 ]] && echo a
+
+else
+    echo a
+fi

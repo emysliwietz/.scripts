@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+dp="$HOME/pCloudDrive/agenda/dailyplan.org"
+today=$(date +"%Y-%m-%d")
+tomorrow=$(date +"%Y-%m-%d" -d "+ 1 day")
+dmenu=$(echo '' | dmenu -p $today)
+time_ago=${1:-0}
+
+if [[ -z $dmenu ]]; then
+    notify-send "a"
+    exit
+fi
+
+toinsert=$(echo "**** TODO [`date +%H:%M -d -${time_ago}min`]       $dmenu")
+insertline=$(agendatoday $tomorrow)
+
+
+t=$(mktemp)
+sed "${insertline}i $toinsert" "$dp" > "$t"
+mv "$dp" "$dp.old"
+mv "$t" "$dp"
+dunstify -a "Dailyadd" "Added successfully"

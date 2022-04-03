@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+if [ -f /sys/class/backlight/intel_backlight/brightness ]; then
+    echo "bri "
+    bri=$(cat /sys/class/backlight/intel_backlight/brightness)
+    p=$(echo "scale=2;$bri/1200" | bc)
+    echo "^c`gradient '#FFFFFF' '#000000' $p`^"
+    if [ "$bri" -le 10 ]; then
+	echo "$bri"
+    else
+	echo "^c#DDAAAA^"
+	hbar $(($bri / 12))
+    fi
+fi

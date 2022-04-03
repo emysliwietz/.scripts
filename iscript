@@ -1,0 +1,3 @@
+#!/bin/sh
+
+$(ls /home/user/.scripts/iscripts | dmenu -l 32)

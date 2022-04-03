@@ -1,0 +1,24 @@
+ #!/bin/bash
+
+# open the browser on a bookmark or search duckduckgo
+
+if [ "$#" = 0 ]; then
+     browser=${BROWSER:-firefox}
+else
+     browser="${BROWSER:-firefox} --new-window --private-window"
+fi
+
+pgrep -x dmenu && exit
+
+BOOKMARKS="$HOME/.scripts/bookmarks"
+choice=$(cat $BOOKMARKS | field 1 | sort | dmenu -i -p "Search DuckDuckGo:") || exit 1
+
+# Detect if url
+if ! [[ -z "$(grep $choice $BOOKMARKS)" ]]; then
+    url=$(echo $(echo `grep "$choice" "$BOOKMARKS" | field 2`) | field 1)
+    $browser $url
+elif [[ "$choice" =~ ^(http:\/\/|https:\/\/)?[a-zA-Z0-9]+\.[a-zA-Z]+(/)?.*$ ]]; then
+    $browser "$choice"
+else
+    $browser "https://duckduckgo.com/?q=${choice// /%20}&t=ffab&atb=v1-1"
+fi

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+a=$(echo 'PYPL MSFT V C UPS XOM RDS/A RDS/B MCD QQQ BABA BA ATVI COST DIS HON VYM SPY AMZN TSLA GOGL NFLX BRK/A BRK/B LMT AMD INTC SBUX APPL TWTR FB UBER' | tr ' ' '\n' | sort | dmenu -i -l 32)
+
+wget --user-agent="Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36" -cO /tmp/stonks.png "https://c.stockcharts.com/c-sc/sc?s=$a&i=0"
+
+feh /tmp/stonks.png && rm /tmp/stonks.png

@@ -1,0 +1,4 @@
+#!/bin/sh
+
+
+a=$(brotab list | grep YouTube | awk '{ $1=""; print $0 }' | dmenu -l 32 | sed 's/.*YouTube //') && [[ -z "$a" ]] || mpv "$a"

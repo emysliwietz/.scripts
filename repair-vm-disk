@@ -1,0 +1,6 @@
+#!/bin/sh
+
+for x in "$(find ~ -iname "*.vmdk" )"; do
+	echo "$x"
+	vmware-vdiskmanager -R "$x"
+done

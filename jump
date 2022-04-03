@@ -1,0 +1,27 @@
+#!/bin/sh
+
+truncate -s 0 /tmp/dwmclientsandbtabs
+
+brotab list | awk '{$NF=""; a=$1; $1=""; print($0 "(" a ")")}' | sed 's|^\ ||' > /tmp/btaps 
+while read ffinstance; do
+    a=$(echo "$ffinstance" | grep "Mozilla Firefox" | sed 's/- Mozilla Firefox.//')
+    if [[ -z "$a" ]]; then
+	echo "$ffinstance" >> /tmp/dwmclientsandbtabs
+	continue
+    fi
+    num=$(echo $a | sed 's|.*(||;s|)$||')
+    a=$(echo $a | sed 's/\(.*\)\ .*/\1/')
+    corr=$(grep "$a" /tmp/btaps | sed 's|.*(||;s|)$||;s/\(.*\)\..*/\1/')
+    while read tab; do
+	z=$(echo $tab | grep "($corr")
+	if [[ -z "$z" ]]; then continue; fi
+	echo "$z ($num)" >> /tmp/dwmclientsandbtabs
+    done < /tmp/btaps
+done < /tmp/dwmclients
+
+t=$(cat /tmp/dwmclientsandbtabs | dmenu -i -l 32)
+s=$(echo $t | awk '{print $NF}' | sed 's/^.//;s/.$//')
+b=$(echo $t | awk '{print $(NF-1)}' | sed 's/^.//;s/.$//')
+echo "$s"
+[[ $b =~ [a-z]*\.[0-9]*\.[0-9]* ]] && echo "$b"
+

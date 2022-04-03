@@ -1,0 +1,3 @@
+#!/bin/sh
+type=$(echo "img+gif pdf img gif" | tr ' ' '\n' | dmenu -p "Download type:")
+echo $type

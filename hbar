@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+height=$(( 22 - $(~/.scripts/percentage_of $1 22)))
+echo "^r0,4,10,22^^c#222220^^r0,4,10,$height^^f10^"
+echo "^c#ddaaaa^"

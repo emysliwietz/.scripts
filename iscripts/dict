@@ -1,0 +1,31 @@
+#!/bin/bash
+
+(pip freeze | grep dict.cc.py) > /dev/null || sudo pip install dict.cc.py
+
+pgrep -x dmenu && exit
+
+choice=$(echo "en/de
+de/en
+nl/de
+de/nl
+nl/en
+en/nl
+" | dmenu_color.sh "Select language:" | sed "s/\// /")
+
+word=$(echo | dmenu_color.sh "Enter word:")
+
+(dict.cc.py $choice $word | tail -n +5 | cut -c 61-) > /tmp/dict.cc
+
+if [ -z $(cat /tmp/dict.cc) ]
+then
+    choice=$(echo $choice | sed "s/ /: :/")
+   (trans -brief $choice $word) > /tmp/dict.cc
+fi
+
+translation=$(cat /tmp/dict.cc | dmenu_color.sh)
+
+
+echo $translation | xclip -selection clipboard
+echo $translation | xclip
+notify-send "'$translation' copied to clipboard." &
+

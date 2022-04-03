@@ -1,0 +1,2 @@
+a=$(TZ='Europe/Amsterdam' date '+%a %F %T'; echo " "; TZ='Asia/Singapore' date '+%H:%M')
+echo $a

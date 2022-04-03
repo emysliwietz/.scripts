@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if grep --quiet Debian /proc/version; then
+	sudo apt update; sudo apt upgrade
+elif grep --quiet Arch /proc/version; then
+	sudo pacman -Syyu
+fi

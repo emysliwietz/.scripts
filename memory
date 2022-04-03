@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+a=$(cat /proc/meminfo)
+echo "mem "
+hbar $(echo "100 - `echo $a | awk '{print $8}'` / `echo $a | awk '{print $2}'` * 100" | bc -l | sed 's/\..*//')

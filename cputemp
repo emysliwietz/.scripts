@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+temp=$(sensors | grep Core | field 3 | sed 's/\.0//g;s/^.//' | sort -n | tail -n 1)
+t=$(echo $temp | sed 's/..$//')
+p=$(echo "scale=2;(($t-50)*3 / 100)" | bc)
+echo "^c`gradient $p`^$temp^c#ddaaaa^"

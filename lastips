@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+a=$(for i in $(last | grep -v "127.0.0.1" | grep -v "reboot .* system boot" | grep -v ":pts/" | field 3 | sort | uniq); do
+    echo "$i $(geoiplookup $i)";
+    done | grep -v Germany | grep -v Netherlands | grep -v "can't resolve hostname" | tr '\n' 'ö')
+
+b=$(echo $a | tr 'ö' '\n' | field 1)
+
+for c in $b; do
+    echo $c;
+done

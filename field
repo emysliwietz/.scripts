@@ -1,0 +1,11 @@
+#!/bin/bash
+#prints specified fields of stdin
+
+
+if [[ "$1" -ge 0 ]]; then
+	awk "{print \$$1}"
+elif [[ "$1" -eq -1 ]]; then
+	awk '{print $NF}'
+else
+        awk "{print \$(NF$(($1+1)))}"
+fi

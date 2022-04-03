@@ -1,0 +1,5 @@
+#!/bin/sh
+eval $(xdotool getmouselocation -shell) && xdotool mousemove 1000 700 click 1 click 1 mousemove 2600 700 click 1 click 1 mousemove 1000 1600 click 1 click 1 mousemove 2600 1600 click 1 click 1 mousemove $X $Y
+
+
+

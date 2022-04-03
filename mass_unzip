@@ -1,0 +1,25 @@
+#!/bin/sh
+
+for file in $(ls); do
+    if [[ "$file" == *.7z ]]; then
+        mkdir ${file::-3}
+	mv "${file}" "${file::-3}"
+    fi
+
+    if [[ -d "$file" ]]; then
+       cd "$file"
+       7z e -bd -pinfected *.7z &
+       cd ..
+    fi
+
+# reset routine
+#    if [[ -d "$file" ]]; then
+#       cd "$file"
+#       for file in $(ls); do
+#       	   if ! [[ "$file" == *.7z ]]; then
+#	      rm "$file" || rmdir "$file"
+#	   fi
+#       done
+#       cd ..
+#    fi
+done

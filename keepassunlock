@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+/bin/killall keepassxc
+</home/user/.keepass_auth keepassxc --keyfile /media/user/keychain/pwd/pwd --pw-stdin /media/user/keychain/pwd/Passwords.kdbx & 

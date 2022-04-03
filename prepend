@@ -1,0 +1,40 @@
+#!/bin/python3
+
+import sys
+from os import listdir
+from os.path import isfile, join
+
+
+def exit_this():
+    print("Usage: " + sys.argv[0] + " prependor" + " prependee(s)")
+    print("Alternate usage: prepend -s [directory] for student numbers")
+    sys.exit(-1)
+
+
+if len(sys.argv) < 3:
+    exit_this()
+else:
+    if len(sys.argv) == 3 and not sys.argv[1] == "-s":
+        pretext_file = sys.argv[1]
+        folder = sys.argv[2]
+        if not isfile(pretext_file):
+            exit_this()
+        with open(pretext_file, "r", encoding='utf-8') as file:
+            prep = file.read()
+    elif len(sys.argv) == 3 and sys.argv[1] == "-s":
+        pretext_file = sys.argv[0]
+        prep = "/*\n\ts1000794\tMatti Eisenlohr\n\ts1000796\tEgidius Mysliwietz\n*/\n"
+        folder = sys.argv[2]
+    else:
+        exit_this()
+    if isfile(folder) or not isfile(pretext_file):
+        exit_this()
+
+    toprep = [f for f in listdir(folder) if isfile(join(folder, f))]
+    for file in toprep:
+        prevcontent = ""
+        with open(join(folder, file), "r", encoding='utf-8') as currfile:
+            prevcontent = currfile.read()
+        with open(join(folder, file), "w", encoding='utf-8') as currfile:
+            currfile.write(prep)
+            currfile.write(prevcontent)

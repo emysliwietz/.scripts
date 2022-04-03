@@ -1,0 +1,6 @@
+#!/bin/bash
+
+date +%T | figlet
+sleep 1
+clear
+exec $0

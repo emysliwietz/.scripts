@@ -1,0 +1,24 @@
+0s  echo '^c#ddaaaa^'
+----
+5m corona
+----
+30m .scripts/weather
+----
+1s  cpuspeed
+----
+1s  cputemp
+----
+1s fanspeed
+----
+1s memory
+----
+1s volume
+----
+1s monitor_brightness
+----
+1s wifi_quality
+----
+1s  battery
+----
+1s  date_format
+----

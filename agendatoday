@@ -1,0 +1,6 @@
+#!/bin/bash
+today=${1:-`date +"%Y-%m-%d"`}
+dp="$HOME/pCloudDrive/agenda/dailyplan.org"
+
+a=$(grep -nH $today $dp | grep PROJECT || grep -nH $(echo $today | sed 's/-/./g') $dp | grep PROJECT)
+echo $a | head -n1 | field 1 | sed 's/^[^:]*://g;s/:.*//' | tr -d '\n'

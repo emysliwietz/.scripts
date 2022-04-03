@@ -1,0 +1,26 @@
+#!/bin/bash
+
+if ! [[ $(hostname) = "JARVIS-ARCH" ]]; then
+    echo "|$(hostname)|"
+    exit
+fi
+
+[[ $BLOCK_BUTTON = "1" ]] && notify-send hello && exit
+
+googlepw=$(secret-tool lookup google google)
+
+if [ -z $googlepw ]; then
+    echo ""
+    exit
+fi
+
+
+youtube-dl -o "/mnt/progs/videos/varg/%(title)s.%(ext)s" -i --write-description --embed-subs --write-thumbnail --add-metadata --xattrs -u mail.sermak@gmail.com -p "$googlepw" https://www.youtube.com/user/ThuleanPerspective &
+
+youtube-dl -o "/mnt/progs/videos/bizzonacci/%(title)s.%(ext)s" -i --write-description --embed-subs --write-thumbnail --add-metadata --xattrs -u mail.sermak@gmail.com -p "$googlepw" https://www.youtube.com/channel/UCTU7zMqyCsIcaYWwtjemYoQ &
+
+youtube-dl -o "/mnt/progs/videos/bizzonacci/%(title)s.%(ext)s" -i --write-description --embed-subs --write-thumbnail --add-metadata --xattrs -u mail.sermak@gmail.com -p "$googlepw" https://www.youtube.com/channel/UC0pTNUlwUFLyLsKiCFzySjA &
+
+youtube-dl -o "/mnt/progs/videos/luke/%(title)s.%(ext)s" -i --write-description --embed-subs --write-thumbnail --add-metadata --xattrs -u mail.sermak@gmail.com -p "$googlepw" https://www.youtube.com/channel/UC2eYFnH61tmytImy1mTYvhA &
+
+youtube-dl -o "/mnt/progs/videos/princeofzimbabwe/%(title)s.%(ext)s" -i --write-description --embed-subs --write-thumbnail --add-metadata --xattrs -u mail.sermak@gmail.com -p "$googlepw" https://www.youtube.com/channel/UCVO8YsD87ibqRGIJ7o8sOzg &

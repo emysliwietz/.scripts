@@ -1,0 +1,10 @@
+#!/bin/python
+import sys
+import math
+n = float(sys.argv[1])
+r = float(sys.argv[2])
+npr = math.factorial(n)/math.factorial(n-r)
+if int(npr) == npr:
+    print(int(npr))
+else:
+    print(npr)

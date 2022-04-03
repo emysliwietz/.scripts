@@ -1,0 +1,16 @@
+#!/bin/bash
+BIN="$HOME/.scripts"
+S=$(echo '' | dmenu_color.sh "Enter a name for your script")
+SCRIPT=$BIN/$S
+
+if [[ -z $S ]]; then
+    echo you entered nothing
+else
+    if [[ -f $SCRIPT ]]; then
+	notify-send "file already exists"
+    else
+	echo '#!/bin/bash' > $SCRIPT
+	chmod +x $SCRIPT
+	exec emacsclient -c $SCRIPT
+    fi
+fi

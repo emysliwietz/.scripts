@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+orig=$(xclip -o)
+xdotool sleep 0.1 key --clearmodifiers --repeat 10 Shift+Left key --clearmodifiers Right
+a=$(xclip -o)
+echo "$a" | grep '#' || (xdotool sleep 0.1 keyup Super_L && exit)
+a=$(echo "$a" | sed 's/.*\#//')
+len=$((${#a} + 1))
+insert=$(grep "$a" .scripts/shortcuts | awk '{$1 = ""; print $0}' | sed 's/^[[:space:]]//')
+echo "$insert" | xclip -i
+xdotool sleep 0.1 key --clearmodifiers --repeat $len BackSpace click --clearmodifiers 2 keyup Super_L
+echo "$orig" | xclip -i
+

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+if [[ $(grep "^\s*w" /proc/net/wireless) ]]; then
+    echo "net "
+    hbar `grep "^\s*w" /proc/net/wireless | awk '{ print int($3 * 100 / 70) }'`
+    sed "s/down//;s/up//" /sys/class/net/e*/operstate
+fi

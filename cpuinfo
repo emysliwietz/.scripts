@@ -1,0 +1,13 @@
+#!/bin/bash
+
+cpu=$(echo $(echo "scale=2;`cat /proc/cpuinfo | grep "^[c]pu MHz" | awk '{print $4}' | sort -n | sed -n '$p' | sed 's/\..*//'` / 1000" | bc -l) | sed 's/^\./0\./')
+s=$(sensors | tr '\n' '#')
+temp=$(echo $s | tr '#' '\n' | grep Core | field 3 | sed 's/\.0//g;s/^.//' | sort -n | tail -n 1)
+gputemp=$(echo $s | tr '#' '\n' | grep -A3 radeon | grep temp1 | field 2 | sed 's/\.0//g;s/^.//')
+if [[ "$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)" == "powersave" ]]; then
+     a=""
+else
+     a=""
+fi
+
+echo "${cpu}GHz $a $temp $gputemp"

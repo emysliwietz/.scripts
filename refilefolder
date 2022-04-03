@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+REFILE_FOLDER="/home/user/.config/emacs/modules/refile.d/"
+
+DEST="$(find "$REFILE_FOLDER" -mindepth 1 -type f | dmenu -l 32)"
+
+echo "$@" >> "$DEST"

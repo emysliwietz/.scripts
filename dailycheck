@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+dp="$HOME/pCloudDrive/agenda/dailyplan.org"
+year=${1:-`date +"%Y"`}
+today=$(date +"%Y-%m-%d")
+unfinished=0
+days=0
+
+IFS="
+"
+
+function finish () {
+    echo "You have $unfinished unfinished dailyplans in $year. That's `python -c \"print(str(round(($unfinished/$days)*100,2))+'%')\"`" > /dev/stderr 
+    exit
+}
+
+function notdone() {
+    echo $day
+    unfinished=$((unfinished+1))   
+}
+
+for day in `year $year`; do
+    days=$((days+1))
+    if (grep $day $dp ||
+	    grep $(echo $day | sed 's/-/./g') $dp) >/dev/null; then
+	line=$(grep $day $dp || grep $(echo $day | sed 's/-/./g') $dp)
+	if ! (echo $line | grep -E "\[[0-9]+\/[0-9]+\]") >/dev/null; then
+	    notdone
+	else
+	    b=$(grep -A4 "$day" "$dp" || grep -A4 "$(echo $day | sed 's/-/./g')" "$dp")
+	    if echo $b | grep "\[0\/10\].*\*\*\*\* TODO \[08:00-09:30\][[:space:]]*$">/dev/null; then
+		notdone
+	    fi
+	fi
+    else
+	notdone
+    fi
+#    read
+    echo $day | grep $today>/dev/null && finish
+done
+

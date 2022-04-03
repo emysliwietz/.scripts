@@ -1,0 +1,16 @@
+#!/bin/python
+import sys
+
+n = float(sys.argv[1])
+k = float(sys.argv[2])
+
+def sk_stirling(n, k):
+        assert int(n) == n
+        if k == 1 or n == k:
+                return 1
+        elif k > n:
+                return 0
+        else:
+                return k * sk_stirling(n - 1, k) + sk_stirling(n - 1, k - 1)
+
+print(sk_stirling(n, k))

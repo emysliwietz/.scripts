@@ -1,0 +1,25 @@
+#!/bin/bash
+
+(pacman -Qe | grep translate-shell) > /dev/null || sudo pacman --noconfirm -S translate-shell
+
+pgrep -x dmenu && exit
+
+choice=$(echo "en/de
+de/en
+nl/de
+de/nl
+nl/en
+en/nl
+" | dmenu_color.sh "Select language:" | sed "s/\// /" | sed "s/ /: :/")
+
+word=$(echo | dmenu_color.sh "Enter word:")
+
+(trans -brief $choice "$word") > /tmp/dict.cc
+
+translation=$(cat /tmp/dict.cc | dmenu_color.sh)
+
+
+echo $translation | xclip -selection clipboard
+echo $translation | xclip
+notify-send "'$translation' copied to clipboard." &
+

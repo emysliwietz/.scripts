@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+
+echo $(curl https://www.mags.nrw/coronavirus-fallzahlen-nrw 2>/dev/null | grep -A1 "Rhein-Erft-Kreis" | sed "1d;q")

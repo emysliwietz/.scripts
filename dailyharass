@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+$(dunstify -a "Dailyplan" "$(/home/user/.scripts/dailycheck 2>&1 > /dev/null)" -A "emacsclient +$(agendatoday) -c $HOME/pCloudDrive/agenda/dailyplan.org,dailyplan") > /dev/null 2>/dev/null &

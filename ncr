@@ -1,0 +1,11 @@
+#!/bin/python
+import sys
+import math
+n = float(sys.argv[1])
+r = float(sys.argv[2])
+npr = math.factorial(n)/math.factorial(n-r)
+ncr = npr/math.factorial(r)
+if int(ncr) == ncr:
+    print(int(ncr))
+else:
+    print(ncr)

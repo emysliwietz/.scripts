@@ -1,0 +1,20 @@
+#!/usr/bin/env sh
+#sshfs.sh -p 1337 user@mysliwietz.de:/ sshfs/jarvis &
+#sshfs.sh user@mysliwietz.de:/mnt/backup/hdd/Uni sshfs/Uni2 &
+#sshfs.sh mysliwietz.de:/mnt/backup/backups/pre_master/Uni sshfs/Uni &
+#sshfs.sh mysliwietz.de:/mnt/backup/backups/pre_master/kelsey_video_calls sshfs/kelsey &
+#sshfs.sh mysliwietz.de:/mnt/hdd/volumes sshfs/volumes &
+#sshfs.sh mysliwietz.de:/mnt/backup/backups/pre_master/agenda/ sshfs/dp &
+#sshfs.sh mysliwietz.de:cloudconfig sshfs/cloudconfig &
+
+
+sshfs -p 1337 user@mysliwietz.de:/ sshfs/jarvis &
+sshfs user@mysliwietz.de:/mnt/backup/hdd/Uni sshfs/Uni2 &
+sshfs mysliwietz.de:/mnt/backup/backups/pre_master/Uni sshfs/Uni &
+sshfs mysliwietz.de:/mnt/backup/backups/pre_master/kelsey_video_calls sshfs/kelsey &
+sshfs mysliwietz.de:/mnt/hdd/volumes sshfs/volumes &
+sshfs mysliwietz.de:/mnt/backup/backups/pre_master/agenda/ sshfs/dp &
+sshfs mysliwietz.de:cloudconfig sshfs/cloudconfig &
+sshfs mysliwietz.de:/mnt/media/calibre sshfs/calibre &
+sshfs mysliwietz.de:/mnt/hdd sshfs/hdd &
+sshfs mysliwietz.de:/mnt/backup sshfs/backup &

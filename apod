@@ -1,0 +1,76 @@
+#!/usr/bin/python3
+
+import datetime
+from urllib.request import urlopen
+import sys
+from bs4 import BeautifulSoup
+from random import randint
+import os
+
+URL = "https://apod.nasa.gov/apod/"
+SAVE_LOCATION = "/home/user/Pictures/wallpaper.jpg"
+WALL_LOCATION = "/home/user/nextcloud/wallpapers/apod/"
+
+def fetch_image():
+    image = soup.find_all("img")
+    for i in image:
+        i = str(i)
+        imageurl = URL + (i[i.index("src") + 5:i.index(".jpg") + 4])
+        break
+    f = open(SAVE_LOCATION, 'wb')
+    f.write(urlopen(imageurl).read())
+    f.close()
+    g = open(WALL_LOCATION + str(randint(0, 99999999999999999999)) + ".jpg", 'wb')
+    g.write(urlopen(imageurl).read())
+    g.close()
+    from subprocess import call
+    call(["feh", "--bg-fill", SAVE_LOCATION])
+
+
+def get_explanation():
+    s = soup.getText()
+    expstring = ""
+    inexp = False
+    for c in str(s).split("\n"):
+        if "Explanation: " in c:
+            inexp = True
+        elif "Tomorrow's picture:" in c:
+            inexp = False
+        if inexp:
+            expstring += c + "\n"
+    return expstring.strip()
+
+
+def get_title():
+    s = soup.getText()
+    titlestring = ""
+    title_in_next_line = False
+    title = False
+    year = str(datetime.datetime.now().year)
+    for c in str(s).split("\n"):
+        if title_in_next_line:
+            title = True
+        if year in c:
+            title_in_next_line = True
+        elif "Image Credit" in c:
+            title = False
+            title_in_next_line = False
+        if title:
+            titlestring += c
+    return titlestring.strip()
+
+
+pageFile = urlopen(URL)
+pageHtml = pageFile.read()
+pageFile.close()
+soup = BeautifulSoup(pageHtml, "html.parser")
+
+if len(sys.argv) == 1:
+    fetch_image()
+    print("Fetched " + get_title())
+elif len(sys.argv) > 2:
+    print("Usage :" + sys.argv[0] + " exp|tit")
+elif "exp" in str(sys.argv[1]).lower():
+    print(get_explanation())
+elif "tit" in str(sys.argv[1]).lower():
+    print(get_title())

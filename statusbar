@@ -1,0 +1,90 @@
+#!/usr/bin/env python3
+from pprint import pprint
+from os import system
+import subprocess
+from threading import Event, Thread
+
+
+def call_repeatedly(interval, func, *args):
+    stopped = Event()
+
+    def loop():
+        while not stopped.wait(interval):  # the first call is in `interval` secs
+            func(*args)
+
+    Thread(target=loop).start()
+    return stopped.set
+
+
+commands = []
+status_string = []
+
+
+def process_time(time):
+    unit = time[-1]
+    time = int(time[:-1])
+    if unit == "m":
+        time *= 60
+    elif unit == "h":
+        time *= 60 * 60
+    elif unit == "d":
+        time *= 60 * 60 * 24
+    return time
+
+
+def handle_command(line):
+    global commands
+    line = line.split(" ")
+    commands += [(process_time(line[0]), " ".join(line[1:]).strip())]
+
+
+def handle_line(line):
+    global commands
+    if line == "----":
+        commands += [(0, "echo '|'")]
+    else:
+        handle_command(line)
+
+
+def update_command(index, command):
+    try:
+        status_string[index] = subprocess.check_output(
+            command, shell=True, text=True
+        ).replace("\n", "")
+    except:
+        status_string[index] = ""
+
+
+i = 0
+
+
+def update():
+    global i
+    for index, (time, command) in enumerate(commands):
+        if time == 0:
+            continue
+        elif not i % time:
+            update_command(index, command)
+    i += 1
+    try:
+        subprocess.check_output(
+            ("xsetroot -name '" + "".join(status_string) + "'"), shell=True
+        ).replace("\n", "")
+    except:
+        pass
+
+
+with open("/home/user/.scripts/status") as f:
+    file = f.read()
+
+
+for line in file.splitlines():
+    handle_line(line)
+
+
+for index, (time, command) in enumerate(commands):
+    status_string += [""]
+    update_command(index, command)
+
+
+call_repeatedly(1, update)

@@ -1,0 +1,52 @@
+#!/bin/bash
+
+SPEEDFILE="/tmp/mousemovespeed"
+
+
+if ! [ -f $SPEEDFILE ]; then
+    echo file does ont exists
+    echo 100 > $SPEEDFILE
+fi
+
+if [ -z $(cat $SPEEDFILE) ]; then
+    echo file does ont exists
+    echo 100 > $SPEEDFILE
+fi
+
+if [ $# = 0 ]; then
+    echo "Utility to use the cursor without a physical mouse using xdotool
+    	 	  
+	  mousemove [up/down/left/right]	to move the cursor
+	  mousemove click [1/2/3]	  	click left/middle/right mouse button
+	  mousemove faster			make movement twice as fast
+	  mousemove slower			make movement twice as slow"
+fi
+    
+MOUSEX=$(xdotool getmouselocation | awk "{ print \$1 }" | sed 's/x://g')
+MOUSEY=$(xdotool getmouselocation | awk "{ print \$2 }" | sed 's/y://g')
+
+MOUSEMOVESPEED=$(cat $SPEEDFILE)
+echo "speed = $MOUSEMOVESPEED"
+
+if [ "$1" = "up"  ]; then
+    xdotool mousemove $MOUSEX $(($MOUSEY - $MOUSEMOVESPEED))
+elif [ "$1" = "down"  ]; then
+    xdotool mousemove $MOUSEX $(($MOUSEY + $MOUSEMOVESPEED))
+elif [ "$1" = "left"  ]; then
+    xdotool mousemove $(($MOUSEX - $MOUSEMOVESPEED)) $MOUSEY
+elif [ "$1" = "right"  ]; then
+    xdotool mousemove $(($MOUSEX + $MOUSEMOVESPEED)) $MOUSEY
+elif [ "$1" = "click"  ]; then
+    xdotool click $2
+elif [ "$1" = "faster"  ]; then
+    MOUSEMOVESPEED=$(($MOUSEMOVESPEED * 2))
+    notify-send "Speed set to $MOUSEMOVESPEED"
+    echo $MOUSEMOVESPEED > $SPEEDFILE
+elif [ "$1" = "slower"  ]; then
+    MOUSEMOVESPEED=$(($MOUSEMOVESPEED / 2))
+    if [ $MOUSEMOVESPEED = 0 ]; then
+	MOUSEMOVESPEED=1
+    fi
+    notify-send "Speed set to $MOUSEMOVESPEED"
+    echo $MOUSEMOVESPEED > $SPEEDFILE
+fi

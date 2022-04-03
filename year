@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+year=${1:-`date +"%Y"`}
+
+(
+for m in `seq 1 12`; do
+    for d in `seq 1 7`; do
+	days=$(cal -m $m $year | field $d)
+	for day in $days; do
+	    if [[ "$day" =~ ^[0-9]+$ ]] && ! [[ "$day" == "$year" ]]; then
+		line="${year}-$(printf "%02d" $m)-$(printf "%02d" $day)"
+		case $d in
+		    1) line="${line} Sunday";;
+		    2) line="${line} Monday";;
+		    3) line="${line} Tuesday";;
+		    4) line="${line} Wednesday";;
+		    5) line="${line} Thursday";;
+		    6) line="${line} Friday";;
+		    7) line="${line} Saturday";;
+		esac
+		echo $line
+	    fi
+	done
+    done
+done && date +"%Y-%m-%d %A"
+) | sort -n

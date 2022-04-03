@@ -1,0 +1,35 @@
+eselect kernel list
+eselect kernel set #
+
+# Use current kernel config and store copy
+gunzip /proc/config.gz -c > /root/config; cp /root/config /root/config-$(uname -r)
+
+#  Optionally change module settings in the config file, or use --menuconfig
+#  with genkernel.
+eselect kernel set 2
+cd /usr/src/linux/
+echo "Building..."
+make -j5 olddefconfig
+make -j5 modules_prepare
+make modules_install
+emerge --ask @module-rebuild
+make -j5
+make install"$"
+
+
+# Update packages with kernel modules
+emerge -1 @module-rebuild
+
+echo "Remember to set new kernel as default... Press enter"
+pause
+
+# Cleanup old files
+for name in $(ls /lib/modules/ | sort -V | head -n -3); do
+  rm -rf /boot/{initramfs,kernel,System.map}-genkernel-x86_64-${name:?}
+    rm -rf /lib/modules/${name:?}
+    done
+
+
+# Update boot config file
+grub-mkconfig -o /boot/grub/grub.cfg
+

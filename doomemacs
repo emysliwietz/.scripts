@@ -1,0 +1,4 @@
+#!/bin/sh
+
+rm ~/.emacs.d
+ln -s ~/.emacs.doom ~/.emacs.d

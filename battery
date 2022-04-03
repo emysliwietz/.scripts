@@ -1,0 +1,20 @@
+if [ -f /sys/class/power_supply/BAT0/status ]; then
+    # Will show all batteries with approximate icon for remaining power.
+    case "$(cat /sys/class/power_supply/BAT1/status)" in
+	"Discharging") 	echo "^c#aa0010^d^c#ddaaaa^";;
+	"Charging")	echo "^c#00aa10^c^c#ddaaaa^";;
+	"Unknown")	echo "^c#00aa10^c^c#ddaaaa^";;
+    esac
+    for x in /sys/class/power_supply/BAT?/capacity;
+    do
+	x=$(cat $x)
+	case "$x" in
+	    100|9[0-9])	    color="#00dd10" ;;
+	    8[0-9]|7[0-9])  color="#88dd10" ;;
+	    6[0-9]|5[0-9])  color="#dddd10" ;;
+	    4[0-9]|3[0-9])  color="#dd8810" ;;
+	    *)		    color="#dd0010" ;;
+	esac
+	echo " ^r0,4,50,22^^c#000000^^r2,6,46,18^^c$color^^r2,6,`~/.scripts/percentage_of $x 46`,18^^f50^^c#ddaaaa^^r1,10,3,10^^f4^"
+    done
+fi | tr -d '\n'

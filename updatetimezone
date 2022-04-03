@@ -1,0 +1,16 @@
+#/bin/sh
+
+if [[ "$#" == 1 ]]; then
+a=$(find /usr/share/zoneinfo/ -iname "$1*" | head -n1)
+if [[ -z "$a" ]]; then
+echo nothing found
+exit -1
+else
+echo "$a"
+rootsymlink "$a" /etc/localtime
+fi
+else
+a=$(curl -s https://time.is | grep 'zone_id=' | tail -n1 | sed 's-zone_id=.--;s-.$--')
+#echo $a
+rootsymlink "/usr/share/zoneinfo/$a" /etc/localtime
+fi

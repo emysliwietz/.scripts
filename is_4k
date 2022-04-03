@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+test $(identify -format '%w' $1) -ge 3840 &&
+test $(identify -format '%h' $1) -ge 2160

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+echo "vol "
+amixer_vol=$(amixer get Master | grep -o "[0-9]*%\|\[on\]\|\[off\]")
+echo $amixer_vol | awk '{print $2}' | sed "s/\[on\]/^c#00aa10^/;s/\[off\]/^c#aa0010^/"
+hbar `echo $amixer_vol | awk '{print $1}' | sed "s/%//"`

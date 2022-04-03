@@ -1,0 +1,3 @@
+#!/bin/sh
+
+</home/user/.keepass_auth keepassxc-cli show /media/user/keychain/pwd/Passwords.kdbx -k /media/user/keychain/pwd/pwd "$@" -a Password -s 2>/dev/null

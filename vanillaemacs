@@ -1,0 +1,4 @@
+#!/bin/sh
+
+rm ~/.emacs.d
+ln -s ~/nextcloud/.config/emacs.d.vanilla ~/.emacs.d

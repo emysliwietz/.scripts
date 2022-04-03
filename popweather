@@ -1,0 +1,3 @@
+#!/bin/bash
+curl -s wttr.in/$location > ~/.weatherreport
+curl -s wttr.in/$1 && read

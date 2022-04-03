@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if [ -f "/tmp/SUPER_KEY_DOWN" ]; then
+	xdotool keyup super
+	rm /tmp/SUPER_KEY_DOWN
+else
+	xdotool keydown super
+	touch /tmp/SUPER_KEY_DOWN
+fi

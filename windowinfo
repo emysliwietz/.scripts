@@ -1,0 +1,6 @@
+#!/bin/bash
+windowc=$(xprop | grep CLASS)
+echo $windowc | xclip -selection clipboard
+echo $windowc | xclip
+echo $windowc
+cat
